@@ -8,11 +8,11 @@ export class UserController {
     constructor(private readonly userService: UserService) { }
 
     @MessagePattern({ cmd: "find-by-email" })
-    async findByEmail(email: string) {
-        return this.userService.findByEmail(email)
+    async findByEmail(emailid: string) {
+        return this.userService.findByEmail(emailid)
     }
 
-    @MessagePattern({ cmd: "account-creates" })
+    @MessagePattern({ cmd: "account-create" })
     async create(data: Partial<User>): Promise<User> {
         return this.userService.create(data)
     }
@@ -20,7 +20,6 @@ export class UserController {
     @MessagePattern({ cmd: 'update-user' })
     async update(@Payload() payload: { id: string; data: Partial<User> }): Promise<User> {
         // Extract user ID and the partial user data to update
-        // Call the user service to perform the update and return the updated user
         return this.userService.updateUser(payload.id, payload.data);
     }
 

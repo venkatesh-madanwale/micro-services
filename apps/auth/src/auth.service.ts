@@ -17,16 +17,28 @@ export class AuthService {
     //userService is dependency injection for authentication service
     async register(registerDto: RegisterDto) {
         const { emailid, name, phno, pwd } = registerDto;
+
         const user = await firstValueFrom(
-            this.userClient.send({
-                cmd: "find-by-email"
-            }, emailid)
-        )
-        if (!user) {
-            throw new ConflictException('Email already exists')
+            this.userClient.send({ cmd: "find-by-email" }, emailid)
+        );
+
+        if (user) {
+            throw new ConflictException('Email already exists');
         }
+
         const hashedPassword = await bcrypt.hash(pwd, 10);
-        return { "msg": "User created Successfully!", "id": user.emailid, "name": user.name };
+        const createdUser = await firstValueFrom(
+            this.userClient.send(
+                { cmd: "account-create" },
+                { emailid, name, phno, pwd: hashedPassword }
+            )
+        );
+
+        return {
+            msg: "User created Successfully!",
+            id: createdUser.emailid,
+            name: createdUser.name
+        };
     }
 
     async login(loginDto: LoginDto) {
@@ -40,14 +52,11 @@ export class AuthService {
             throw new UnauthorizedException('Invalid credentials')
         }
         const isPasswordValid = await bcrypt.compare(pwd, user.pwd);
-
         if (!isPasswordValid) {
             throw new UnauthorizedException('Invalid credentials')
         }
-
         const payload = { email: user?.emailid, role: user.role }
         const token = this.jwtService.sign({ payload });
-
         return { "msg": "Login Successful", "email": user.emailid, "name": user.name, "token": token };
     }
 
