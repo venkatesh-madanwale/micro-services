@@ -64,6 +64,15 @@
         "tsConfigPath": "apps/product/tsconfig.app.json"
       }
     },
+    "products": {
+      "type": "application",
+      "root": "apps/products",
+      "entryFile": "main",
+      "sourceRoot": "apps/products/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/products/tsconfig.app.json"
+      }
+    },
     "strategy": {
       "type": "application",
       "root": "apps/strategy",

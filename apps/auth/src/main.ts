@@ -4,5 +4,6 @@ import { AuthModule } from './auth.module';
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
   await app.listen(process.env.port ?? 3000);
+  console.log("Auth micro service listening on port 3000")
 }
 bootstrap();
