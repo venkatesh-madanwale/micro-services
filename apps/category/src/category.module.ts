@@ -1,15 +1,30 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { CategoryService } from './category.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Category, CategorySchema } from './schema/category.schema';
 import { CategoryController } from './category.controller';
-import { Product, ProductSchema } from './products.schema';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/your-db-name'), // Update your MongoDB URI
-    MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
+    ConfigModule.forRoot({
+            isGlobal:true,
+            envFilePath:'apps/category/.env'
+        }),
+    ConfigModule.forRoot({ isGlobal: true }),
+            MongooseModule.forRootAsync({
+                imports: [ConfigModule],
+                inject: [ConfigService],
+                useFactory: async (config: ConfigService) => ({
+                    uri: config.get<any>('MONGO_URI')
+                })
+            }),
+            MongooseModule.forFeature([{
+                name: Category.name,
+                schema: CategorySchema
+            }])
   ],
-  controllers: [CategoryController],
   providers: [CategoryService],
+  controllers: [CategoryController]
 })
 export class CategoryModule {}

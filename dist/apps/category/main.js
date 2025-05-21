@@ -1,20 +1,102 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ([
-/* 0 */,
-/* 1 */
-/***/ ((module) => {
+/******/ 	var __webpack_modules__ = ({
 
-module.exports = require("@nestjs/core");
+/***/ "./apps/category/src/category.controller.ts":
+/*!**************************************************!*\
+  !*** ./apps/category/src/category.controller.ts ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CategoryController = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
+const category_service_1 = __webpack_require__(/*! ./category.service */ "./apps/category/src/category.service.ts");
+let CategoryController = class CategoryController {
+    categoryService;
+    constructor(categoryService) {
+        this.categoryService = categoryService;
+    }
+    async create(data) {
+        const { cat, desc } = data;
+        return await this.categoryService.create(cat, desc);
+    }
+    async findAll() {
+        return await this.categoryService.findAll();
+    }
+    async findOne(id) {
+        return await this.categoryService.findOne(id);
+    }
+    async update(data) {
+        const { id, cat, desc } = data;
+        return await this.categoryService.update(id, cat, desc);
+    }
+    async remove(id) {
+        return await this.categoryService.delete(id);
+    }
+};
+exports.CategoryController = CategoryController;
+__decorate([
+    (0, microservices_1.MessagePattern)({ cmd: 'create_category' }),
+    __param(0, (0, microservices_1.Payload)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "create", null);
+__decorate([
+    (0, microservices_1.MessagePattern)({ cmd: 'get_all_categories' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "findAll", null);
+__decorate([
+    (0, microservices_1.MessagePattern)({ cmd: 'get_category_by_id' }),
+    __param(0, (0, microservices_1.Payload)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "findOne", null);
+__decorate([
+    (0, microservices_1.MessagePattern)({ cmd: 'update_category' }),
+    __param(0, (0, microservices_1.Payload)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "update", null);
+__decorate([
+    (0, microservices_1.MessagePattern)({ cmd: 'delete_category' }),
+    __param(0, (0, microservices_1.Payload)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "remove", null);
+exports.CategoryController = CategoryController = __decorate([
+    (0, common_1.Controller)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof category_service_1.CategoryService !== "undefined" && category_service_1.CategoryService) === "function" ? _a : Object])
+], CategoryController);
+
 
 /***/ }),
-/* 2 */
-/***/ ((module) => {
 
-module.exports = require("@nestjs/microservices");
-
-/***/ }),
-/* 3 */
+/***/ "./apps/category/src/category.module.ts":
+/*!**********************************************!*\
+  !*** ./apps/category/src/category.module.ts ***!
+  \**********************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -26,40 +108,47 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CategoryModule = void 0;
-const common_1 = __webpack_require__(4);
-const mongoose_1 = __webpack_require__(5);
-const category_service_1 = __webpack_require__(6);
-const category_controller_1 = __webpack_require__(9);
-const products_schema_1 = __webpack_require__(8);
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const category_service_1 = __webpack_require__(/*! ./category.service */ "./apps/category/src/category.service.ts");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const category_schema_1 = __webpack_require__(/*! ./schema/category.schema */ "./apps/category/src/schema/category.schema.ts");
+const category_controller_1 = __webpack_require__(/*! ./category.controller */ "./apps/category/src/category.controller.ts");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
 let CategoryModule = class CategoryModule {
 };
 exports.CategoryModule = CategoryModule;
 exports.CategoryModule = CategoryModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/your-db-name'),
-            mongoose_1.MongooseModule.forFeature([{ name: products_schema_1.Product.name, schema: products_schema_1.ProductSchema }]),
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+                envFilePath: 'apps/category/.env'
+            }),
+            config_1.ConfigModule.forRoot({ isGlobal: true }),
+            mongoose_1.MongooseModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: async (config) => ({
+                    uri: config.get('MONGO_URI')
+                })
+            }),
+            mongoose_1.MongooseModule.forFeature([{
+                    name: category_schema_1.Category.name,
+                    schema: category_schema_1.CategorySchema
+                }])
         ],
-        controllers: [category_controller_1.CategoryController],
         providers: [category_service_1.CategoryService],
+        controllers: [category_controller_1.CategoryController]
     })
 ], CategoryModule);
 
 
 /***/ }),
-/* 4 */
-/***/ ((module) => {
 
-module.exports = require("@nestjs/common");
-
-/***/ }),
-/* 5 */
-/***/ ((module) => {
-
-module.exports = require("@nestjs/mongoose");
-
-/***/ }),
-/* 6 */
+/***/ "./apps/category/src/category.service.ts":
+/*!***********************************************!*\
+  !*** ./apps/category/src/category.service.ts ***!
+  \***********************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -78,133 +167,155 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CategoryService = void 0;
-const common_1 = __webpack_require__(4);
-const mongoose_1 = __webpack_require__(5);
-const mongoose_2 = __webpack_require__(7);
-const products_schema_1 = __webpack_require__(8);
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+const category_schema_1 = __webpack_require__(/*! ./schema/category.schema */ "./apps/category/src/schema/category.schema.ts");
 let CategoryService = class CategoryService {
-    productModel;
-    constructor(productModel) {
-        this.productModel = productModel;
+    categoryModel;
+    constructor(categoryModel) {
+        this.categoryModel = categoryModel;
     }
-    async getByCategory(category) {
-        try {
-            return await this.productModel.find({ cat: category }).exec();
+    async create(cat, desc) {
+        const newCat = new this.categoryModel({ cat, desc });
+        return await newCat.save();
+    }
+    async findAll() {
+        return await this.categoryModel.find().exec();
+    }
+    async findOne(id) {
+        const category = await this.categoryModel.findById(id).exec();
+        if (!category) {
+            throw new common_1.NotFoundException('Category not found');
         }
-        catch (err) {
-            throw new Error('Error fetching category products');
+        return category;
+    }
+    async update(id, cat, desc) {
+        const updatedCat = await this.categoryModel.findByIdAndUpdate(id, { cat, desc }, { new: true });
+        if (!updatedCat) {
+            throw new common_1.NotFoundException('Category not found');
         }
+        return updatedCat;
+    }
+    async delete(id) {
+        const result = await this.categoryModel.findByIdAndDelete(id).exec();
+        if (!result) {
+            throw new common_1.NotFoundException('Category not found');
+        }
+        return { message: 'Category deleted successfully' };
     }
 };
 exports.CategoryService = CategoryService;
 exports.CategoryService = CategoryService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, mongoose_1.InjectModel)(products_schema_1.Product.name)),
+    __param(0, (0, mongoose_1.InjectModel)(category_schema_1.Category.name)),
     __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
 ], CategoryService);
 
 
 /***/ }),
-/* 7 */
+
+/***/ "./apps/category/src/schema/category.schema.ts":
+/*!*****************************************************!*\
+  !*** ./apps/category/src/schema/category.schema.ts ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CategorySchema = exports.Category = void 0;
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+let Category = class Category {
+    cat;
+    desc;
+};
+exports.Category = Category;
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Category.prototype, "cat", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Category.prototype, "desc", void 0);
+exports.Category = Category = __decorate([
+    (0, mongoose_1.Schema)({ timestamps: true })
+], Category);
+exports.CategorySchema = mongoose_1.SchemaFactory.createForClass(Category);
+
+
+/***/ }),
+
+/***/ "@nestjs/common":
+/*!*********************************!*\
+  !*** external "@nestjs/common" ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/common");
+
+/***/ }),
+
+/***/ "@nestjs/config":
+/*!*********************************!*\
+  !*** external "@nestjs/config" ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/config");
+
+/***/ }),
+
+/***/ "@nestjs/core":
+/*!*******************************!*\
+  !*** external "@nestjs/core" ***!
+  \*******************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/core");
+
+/***/ }),
+
+/***/ "@nestjs/microservices":
+/*!****************************************!*\
+  !*** external "@nestjs/microservices" ***!
+  \****************************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/microservices");
+
+/***/ }),
+
+/***/ "@nestjs/mongoose":
+/*!***********************************!*\
+  !*** external "@nestjs/mongoose" ***!
+  \***********************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/mongoose");
+
+/***/ }),
+
+/***/ "mongoose":
+/*!***************************!*\
+  !*** external "mongoose" ***!
+  \***************************/
 /***/ ((module) => {
 
 module.exports = require("mongoose");
 
-/***/ }),
-/* 8 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ProductSchema = exports.Product = void 0;
-const mongoose_1 = __webpack_require__(5);
-let Product = class Product {
-    name;
-    cat;
-    price;
-    desc;
-    pimg;
-};
-exports.Product = Product;
-__decorate([
-    (0, mongoose_1.Prop)({ required: true }),
-    __metadata("design:type", String)
-], Product.prototype, "name", void 0);
-__decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", String)
-], Product.prototype, "cat", void 0);
-__decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", String)
-], Product.prototype, "price", void 0);
-__decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", String)
-], Product.prototype, "desc", void 0);
-__decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", String)
-], Product.prototype, "pimg", void 0);
-exports.Product = Product = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
-], Product);
-exports.ProductSchema = mongoose_1.SchemaFactory.createForClass(Product);
-
-
-/***/ }),
-/* 9 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CategoryController = void 0;
-const common_1 = __webpack_require__(4);
-const microservices_1 = __webpack_require__(2);
-const category_service_1 = __webpack_require__(6);
-let CategoryController = class CategoryController {
-    categoryService;
-    constructor(categoryService) {
-        this.categoryService = categoryService;
-    }
-    async getByCategory(category) {
-        return this.categoryService.getByCategory(category);
-    }
-};
-exports.CategoryController = CategoryController;
-__decorate([
-    (0, microservices_1.MessagePattern)({ cmd: 'get-products-by-category' }),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], CategoryController.prototype, "getByCategory", null);
-exports.CategoryController = CategoryController = __decorate([
-    (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [typeof (_a = typeof category_service_1.CategoryService !== "undefined" && category_service_1.CategoryService) === "function" ? _a : Object])
-], CategoryController);
-
-
 /***/ })
-/******/ 	]);
+
+/******/ 	});
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
@@ -235,15 +346,19 @@ var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
 var exports = __webpack_exports__;
+/*!***********************************!*\
+  !*** ./apps/category/src/main.ts ***!
+  \***********************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __webpack_require__(1);
-const microservices_1 = __webpack_require__(2);
-const category_module_1 = __webpack_require__(3);
+const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
+const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
+const category_module_1 = __webpack_require__(/*! ./category.module */ "./apps/category/src/category.module.ts");
 async function bootstrap() {
     const app = await core_1.NestFactory.createMicroservice(category_module_1.CategoryModule, {
         transport: microservices_1.Transport.TCP,
         options: {
+            host: '127.0.0.1',
             port: 3004,
         },
     });

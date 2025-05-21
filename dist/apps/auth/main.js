@@ -33,26 +33,34 @@ exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            config_1.ConfigModule,
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
+                envFilePath: 'apps/auth/.env'
             }),
-            microservices_1.ClientsModule.register([
+            microservices_1.ClientsModule.registerAsync([
                 {
                     name: 'USER_SERVICE',
-                    transport: microservices_1.Transport.TCP,
-                    options: {
-                        host: '127.0.0.1',
-                        port: 3001
-                    }
+                    imports: [config_1.ConfigModule],
+                    inject: [config_1.ConfigService],
+                    useFactory: async (config) => {
+                        const host = await config.get("USER_SERVICE_HOST");
+                        console.log(`userService host: ${host}`);
+                        return {
+                            transport: microservices_1.Transport.TCP,
+                            options: {
+                                host: config.get('USER_SERVICE_HOST'),
+                                port: config.get('USER_SERVICE_PORT')
+                            }
+                        };
+                    },
                 }
             ]),
             jwt_1.JwtModule.registerAsync({
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
-                useFactory: async (ConfigService) => {
+                useFactory: async (config) => {
                     return {
-                        secret: ConfigService.get('JWT_SECRET'),
+                        secret: config.get('JWT_SECRET'),
                         signOptions: {
                             expiresIn: "1d"
                         }

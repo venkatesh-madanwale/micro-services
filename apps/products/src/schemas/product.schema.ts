@@ -20,8 +20,6 @@ export class Product {
   @Prop()
   pimg: string;
 
-//   @Prop({ type: [Comment], default: [] })
-//   comm: Comment[];
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

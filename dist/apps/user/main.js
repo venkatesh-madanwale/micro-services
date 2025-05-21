@@ -1,135 +1,11 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ([
-/* 0 */,
-/* 1 */
-/***/ ((module) => {
+/******/ 	var __webpack_modules__ = ({
 
-module.exports = require("@nestjs/core");
-
-/***/ }),
-/* 2 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UsersModule = void 0;
-const common_1 = __webpack_require__(3);
-const user_service_1 = __webpack_require__(4);
-const mongoose_1 = __webpack_require__(5);
-const user_controller_1 = __webpack_require__(8);
-const user_schema_1 = __webpack_require__(6);
-const config_1 = __webpack_require__(10);
-let UsersModule = class UsersModule {
-};
-exports.UsersModule = UsersModule;
-exports.UsersModule = UsersModule = __decorate([
-    (0, common_1.Module)({
-        imports: [
-            config_1.ConfigModule.forRoot({ isGlobal: true }),
-            mongoose_1.MongooseModule.forRootAsync({
-                imports: [config_1.ConfigModule],
-                inject: [config_1.ConfigService],
-                useFactory: async (config) => ({
-                    uri: config.get('MONGO_URI')
-                })
-            }),
-            mongoose_1.MongooseModule.forFeature([{
-                    name: user_schema_1.User.name,
-                    schema: user_schema_1.UserSchema
-                }])
-        ],
-        controllers: [user_controller_1.UserController],
-        providers: [user_service_1.UserService],
-        exports: [user_service_1.UserService]
-    })
-], UsersModule);
-
-
-/***/ }),
-/* 3 */
-/***/ ((module) => {
-
-module.exports = require("@nestjs/common");
-
-/***/ }),
-/* 4 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UserService = void 0;
-const common_1 = __webpack_require__(3);
-const common_2 = __webpack_require__(3);
-const mongoose_1 = __webpack_require__(5);
-const user_schema_1 = __webpack_require__(6);
-const mongoose_2 = __webpack_require__(7);
-let UserService = class UserService {
-    userModel;
-    constructor(userModel) {
-        this.userModel = userModel;
-    }
-    async findByEmail(emailid) {
-        return this.userModel.findOne({ emailid });
-    }
-    async create(data) {
-        const newUser = new this.userModel(data);
-        return newUser.save();
-    }
-    async updateUser(id, updateData) {
-        const updatedUser = await this.userModel.findByIdAndUpdate(id, updateData, {
-            new: true,
-        });
-        if (!updatedUser) {
-            console.log(`User with ID ${id} not found`);
-            throw new common_1.NotFoundException(`User with ID ${id} not found`);
-        }
-        return updatedUser;
-    }
-    async deleteUser(id) {
-        const user = await this.userModel.findByIdAndDelete(id);
-        if (!user) {
-            console.log(`User with ID ${id} not found`);
-            throw new common_1.NotFoundException(`User with ID ${id} not found`);
-        }
-        return { message: 'User deleted successfully' };
-    }
-};
-exports.UserService = UserService;
-exports.UserService = UserService = __decorate([
-    (0, common_2.Injectable)(),
-    __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
-], UserService);
-
-
-/***/ }),
-/* 5 */
-/***/ ((module) => {
-
-module.exports = require("@nestjs/mongoose");
-
-/***/ }),
-/* 6 */
+/***/ "./apps/user/src/schema/user.schema.ts":
+/*!*********************************************!*\
+  !*** ./apps/user/src/schema/user.schema.ts ***!
+  \*********************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -144,7 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserSchema = exports.User = void 0;
-const mongoose_1 = __webpack_require__(5);
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
 let User = class User {
     emailid;
     name;
@@ -184,13 +60,11 @@ exports.UserSchema = mongoose_1.SchemaFactory.createForClass(User);
 
 
 /***/ }),
-/* 7 */
-/***/ ((module) => {
 
-module.exports = require("mongoose");
-
-/***/ }),
-/* 8 */
+/***/ "./apps/user/src/user.controller.ts":
+/*!******************************************!*\
+  !*** ./apps/user/src/user.controller.ts ***!
+  \******************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -209,9 +83,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserController = void 0;
-const common_1 = __webpack_require__(3);
-const user_service_1 = __webpack_require__(4);
-const microservices_1 = __webpack_require__(9);
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const user_service_1 = __webpack_require__(/*! ./user.service */ "./apps/user/src/user.service.ts");
+const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
 let UserController = class UserController {
     userService;
     constructor(userService) {
@@ -264,19 +138,185 @@ exports.UserController = UserController = __decorate([
 
 
 /***/ }),
-/* 9 */
+
+/***/ "./apps/user/src/user.module.ts":
+/*!**************************************!*\
+  !*** ./apps/user/src/user.module.ts ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UsersModule = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const user_service_1 = __webpack_require__(/*! ./user.service */ "./apps/user/src/user.service.ts");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const user_controller_1 = __webpack_require__(/*! ./user.controller */ "./apps/user/src/user.controller.ts");
+const user_schema_1 = __webpack_require__(/*! ./schema/user.schema */ "./apps/user/src/schema/user.schema.ts");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+let UsersModule = class UsersModule {
+};
+exports.UsersModule = UsersModule;
+exports.UsersModule = UsersModule = __decorate([
+    (0, common_1.Module)({
+        imports: [
+            config_1.ConfigModule.forRoot({ isGlobal: true }),
+            mongoose_1.MongooseModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: async (config) => ({
+                    uri: config.get('MONGO_URI')
+                })
+            }),
+            mongoose_1.MongooseModule.forFeature([{
+                    name: user_schema_1.User.name,
+                    schema: user_schema_1.UserSchema
+                }])
+        ],
+        controllers: [user_controller_1.UserController],
+        providers: [user_service_1.UserService],
+        exports: [user_service_1.UserService]
+    })
+], UsersModule);
+
+
+/***/ }),
+
+/***/ "./apps/user/src/user.service.ts":
+/*!***************************************!*\
+  !*** ./apps/user/src/user.service.ts ***!
+  \***************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const common_2 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const user_schema_1 = __webpack_require__(/*! ./schema/user.schema */ "./apps/user/src/schema/user.schema.ts");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+let UserService = class UserService {
+    userModel;
+    constructor(userModel) {
+        this.userModel = userModel;
+    }
+    async findByEmail(emailid) {
+        return this.userModel.findOne({ emailid });
+    }
+    async create(data) {
+        const newUser = new this.userModel(data);
+        return newUser.save();
+    }
+    async updateUser(id, updateData) {
+        const updatedUser = await this.userModel.findByIdAndUpdate(id, updateData, {
+            new: true,
+        });
+        if (!updatedUser) {
+            console.log(`User with ID ${id} not found`);
+            throw new common_1.NotFoundException(`User with ID ${id} not found`);
+        }
+        return updatedUser;
+    }
+    async deleteUser(id) {
+        const user = await this.userModel.findByIdAndDelete(id);
+        if (!user) {
+            console.log(`User with ID ${id} not found`);
+            throw new common_1.NotFoundException(`User with ID ${id} not found`);
+        }
+        return { message: 'User deleted successfully' };
+    }
+};
+exports.UserService = UserService;
+exports.UserService = UserService = __decorate([
+    (0, common_2.Injectable)(),
+    __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
+], UserService);
+
+
+/***/ }),
+
+/***/ "@nestjs/common":
+/*!*********************************!*\
+  !*** external "@nestjs/common" ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/common");
+
+/***/ }),
+
+/***/ "@nestjs/config":
+/*!*********************************!*\
+  !*** external "@nestjs/config" ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/config");
+
+/***/ }),
+
+/***/ "@nestjs/core":
+/*!*******************************!*\
+  !*** external "@nestjs/core" ***!
+  \*******************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/core");
+
+/***/ }),
+
+/***/ "@nestjs/microservices":
+/*!****************************************!*\
+  !*** external "@nestjs/microservices" ***!
+  \****************************************/
 /***/ ((module) => {
 
 module.exports = require("@nestjs/microservices");
 
 /***/ }),
-/* 10 */
+
+/***/ "@nestjs/mongoose":
+/*!***********************************!*\
+  !*** external "@nestjs/mongoose" ***!
+  \***********************************/
 /***/ ((module) => {
 
-module.exports = require("@nestjs/config");
+module.exports = require("@nestjs/mongoose");
+
+/***/ }),
+
+/***/ "mongoose":
+/*!***************************!*\
+  !*** external "mongoose" ***!
+  \***************************/
+/***/ ((module) => {
+
+module.exports = require("mongoose");
 
 /***/ })
-/******/ 	]);
+
+/******/ 	});
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
@@ -307,11 +347,14 @@ var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
 var exports = __webpack_exports__;
+/*!*******************************!*\
+  !*** ./apps/user/src/main.ts ***!
+  \*******************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __webpack_require__(1);
-const user_module_1 = __webpack_require__(2);
-const microservices_1 = __webpack_require__(9);
+const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
+const user_module_1 = __webpack_require__(/*! ./user.module */ "./apps/user/src/user.module.ts");
+const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
 async function bootstrap() {
     const app = await core_1.NestFactory.createMicroservice(user_module_1.UsersModule, {
         transport: microservices_1.Transport.TCP,
