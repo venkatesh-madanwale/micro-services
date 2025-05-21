@@ -1,4 +1,3 @@
-import { Module } from '@nestjs/common';
 import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -17,4 +16,9 @@ export class AuthController{
     login(@Body() dto:LoginDto){
         return this.authService.login(dto)
         }
+
+    @Post('validate')
+    async validateToken(@Body('payload') payload: any) {
+    return this.authService.validatePayload(payload);
+  }
 }

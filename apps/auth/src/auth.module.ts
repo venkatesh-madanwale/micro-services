@@ -1,15 +1,17 @@
 import { Module } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-// import { UsersModule } from "src/users/users.module";
 import { AuthController } from "./auth.contoller";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { UsersModule } from "apps/user/src/user.module";
 import { ClientsModule, Transport } from "@nestjs/microservices";
+import { JwtStrategy } from "./strategy/jwt.strategy";
 
 
 @Module({
     imports: [
+        ConfigModule,
+        ConfigModule.forRoot({
+        isGlobal: true,}),
         ClientsModule.register([
             {
                 name: 'USER_SERVICE',
@@ -31,10 +33,9 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
                     }
                 };
             }
-
         })
     ],
-    providers: [AuthService],
+    providers: [JwtStrategy,AuthService],
     controllers: [AuthController],
     exports: [AuthService]
 })

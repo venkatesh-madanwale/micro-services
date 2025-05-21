@@ -7,6 +7,7 @@ import { User } from './schema/user.schema';
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
+    
     @MessagePattern({ cmd: "find-by-email" })
     async findByEmail(emailid: string) {
         return this.userService.findByEmail(emailid)

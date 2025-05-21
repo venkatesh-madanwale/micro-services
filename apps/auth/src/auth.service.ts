@@ -3,11 +3,9 @@ import { Injectable, ConflictException } from '@nestjs/common';
 // import { UserService } from 'src/users/users.service'
 // import { RegisterDto } from './src/dto/register.dto';
 import * as bcrypt from 'bcrypt'
-import { from } from 'rxjs';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
-import { UserService } from 'apps/user/src/user.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
@@ -17,7 +15,6 @@ export class AuthService {
     //userService is dependency injection for authentication service
     async register(registerDto: RegisterDto) {
         const { emailid, name, phno, pwd } = registerDto;
-
         const user = await firstValueFrom(
             this.userClient.send({ cmd: "find-by-email" }, emailid)
         );
@@ -55,9 +52,16 @@ export class AuthService {
         if (!isPasswordValid) {
             throw new UnauthorizedException('Invalid credentials')
         }
-        const payload = { email: user?.emailid, role: user.role }
+        const payload = { emailid: user?.emailid, role: user.role }
         const token = this.jwtService.sign({ payload });
         return { "msg": "Login Successful", "email": user.emailid, "name": user.name, "token": token };
     }
+
+    async validatePayload(payload: any) {
+    return {
+      emailid: payload.emailid,
+      role: payload.role,
+    }
+  }
 
 }

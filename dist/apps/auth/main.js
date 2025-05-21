@@ -26,12 +26,17 @@ const auth_contoller_1 = __webpack_require__(9);
 const jwt_1 = __webpack_require__(6);
 const config_1 = __webpack_require__(13);
 const microservices_1 = __webpack_require__(7);
+const jwt_strategy_1 = __webpack_require__(14);
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            config_1.ConfigModule,
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+            }),
             microservices_1.ClientsModule.register([
                 {
                     name: 'USER_SERVICE',
@@ -55,7 +60,7 @@ exports.AuthModule = AuthModule = __decorate([
                 }
             })
         ],
-        providers: [auth_service_1.AuthService],
+        providers: [jwt_strategy_1.JwtStrategy, auth_service_1.AuthService],
         controllers: [auth_contoller_1.AuthController],
         exports: [auth_service_1.AuthService]
     })
@@ -127,9 +132,15 @@ let AuthService = class AuthService {
         if (!isPasswordValid) {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
-        const payload = { email: user?.emailid, role: user.role };
+        const payload = { emailid: user?.emailid, role: user.role };
         const token = this.jwtService.sign({ payload });
         return { "msg": "Login Successful", "email": user.emailid, "name": user.name, "token": token };
+    }
+    async validatePayload(payload) {
+        return {
+            emailid: payload.emailid,
+            role: payload.role,
+        };
     }
 };
 exports.AuthService = AuthService;
@@ -199,6 +210,9 @@ let AuthController = class AuthController {
     login(dto) {
         return this.authService.login(dto);
     }
+    async validateToken(payload) {
+        return this.authService.validatePayload(payload);
+    }
 };
 exports.AuthController = AuthController;
 __decorate([
@@ -215,6 +229,13 @@ __decorate([
     __metadata("design:paramtypes", [typeof (_c = typeof login_dto_1.LoginDto !== "undefined" && login_dto_1.LoginDto) === "function" ? _c : Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.Post)('validate'),
+    __param(0, (0, common_1.Body)('payload')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "validateToken", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)("auth"),
     __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
@@ -312,6 +333,66 @@ __decorate([
 /***/ ((module) => {
 
 module.exports = require("@nestjs/config");
+
+/***/ }),
+/* 14 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.JwtStrategy = void 0;
+const common_1 = __webpack_require__(3);
+const passport_1 = __webpack_require__(15);
+const passport_jwt_1 = __webpack_require__(16);
+const config_1 = __webpack_require__(13);
+let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
+    configService;
+    constructor(configService) {
+        const jwtSecret = configService.get('JWT_SECRET');
+        if (!jwtSecret) {
+            throw new Error('JWT_SECRET not found');
+        }
+        super({
+            jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+            secretOrKey: configService.get('JWT_SECRET'),
+        });
+        this.configService = configService;
+    }
+    async validate(payload) {
+        return {
+            emailid: payload.emailid,
+            role: payload.role,
+        };
+    }
+};
+exports.JwtStrategy = JwtStrategy;
+exports.JwtStrategy = JwtStrategy = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object])
+], JwtStrategy);
+
+
+/***/ }),
+/* 15 */
+/***/ ((module) => {
+
+module.exports = require("@nestjs/passport");
+
+/***/ }),
+/* 16 */
+/***/ ((module) => {
+
+module.exports = require("passport-jwt");
 
 /***/ })
 /******/ 	]);
