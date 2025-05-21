@@ -32,6 +32,9 @@ let CategoryController = class CategoryController {
     constructor(categoryService) {
         this.categoryService = categoryService;
     }
+    async findByName(cat) {
+        return this.categoryService.findByName(cat);
+    }
     async create(data) {
         const { cat, desc } = data;
         return await this.categoryService.create(cat, desc);
@@ -43,14 +46,20 @@ let CategoryController = class CategoryController {
         return await this.categoryService.findOne(id);
     }
     async update(data) {
-        const { id, cat, desc } = data;
-        return await this.categoryService.update(id, cat, desc);
+        return await this.categoryService.update(data.id, data.cat, data.desc);
     }
     async remove(id) {
         return await this.categoryService.delete(id);
     }
 };
 exports.CategoryController = CategoryController;
+__decorate([
+    (0, microservices_1.MessagePattern)({ cmd: 'get_category_by_name' }),
+    __param(0, (0, microservices_1.Payload)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "findByName", null);
 __decorate([
     (0, microservices_1.MessagePattern)({ cmd: 'create_category' }),
     __param(0, (0, microservices_1.Payload)()),
@@ -110,9 +119,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CategoryModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const category_service_1 = __webpack_require__(/*! ./category.service */ "./apps/category/src/category.service.ts");
+const category_controller_1 = __webpack_require__(/*! ./category.controller */ "./apps/category/src/category.controller.ts");
 const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
 const category_schema_1 = __webpack_require__(/*! ./schema/category.schema */ "./apps/category/src/schema/category.schema.ts");
-const category_controller_1 = __webpack_require__(/*! ./category.controller */ "./apps/category/src/category.controller.ts");
 const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
 let CategoryModule = class CategoryModule {
 };
@@ -122,23 +131,19 @@ exports.CategoryModule = CategoryModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
-                envFilePath: 'apps/category/.env'
+                envFilePath: 'apps/category/.env',
             }),
-            config_1.ConfigModule.forRoot({ isGlobal: true }),
             mongoose_1.MongooseModule.forRootAsync({
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
                 useFactory: async (config) => ({
-                    uri: config.get('MONGO_URI')
-                })
+                    uri: config.get('MONGO_URI'),
+                }),
             }),
-            mongoose_1.MongooseModule.forFeature([{
-                    name: category_schema_1.Category.name,
-                    schema: category_schema_1.CategorySchema
-                }])
+            mongoose_1.MongooseModule.forFeature([{ name: category_schema_1.Category.name, schema: category_schema_1.CategorySchema }]),
         ],
         providers: [category_service_1.CategoryService],
-        controllers: [category_controller_1.CategoryController]
+        controllers: [category_controller_1.CategoryController],
     })
 ], CategoryModule);
 
@@ -179,6 +184,9 @@ let CategoryService = class CategoryService {
     async create(cat, desc) {
         const newCat = new this.categoryModel({ cat, desc });
         return await newCat.save();
+    }
+    async findByName(cat) {
+        return this.categoryModel.findOne({ cat }).exec();
     }
     async findAll() {
         return await this.categoryModel.find().exec();
@@ -363,7 +371,7 @@ async function bootstrap() {
         },
     });
     await app.listen();
-    console.log('Category Microservice is running on TCP port 3004');
+    console.log('Category microservice is running on TCP port 3004');
 }
 bootstrap();
 

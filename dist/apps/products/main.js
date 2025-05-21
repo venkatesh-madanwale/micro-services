@@ -395,6 +395,7 @@ const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose
 const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
 const product_schema_1 = __webpack_require__(/*! ./schemas/product.schema */ "./apps/products/src/schemas/product.schema.ts");
 const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
+const rxjs_1 = __webpack_require__(/*! rxjs */ "rxjs");
 let ProductsService = class ProductsService {
     productModel;
     client;
@@ -409,10 +410,10 @@ let ProductsService = class ProductsService {
                 pimg: file?.filename || '',
             });
             await newProduct.save();
-            this.client.emit('product_created', {
-                name: newProduct.name,
-                cat: newProduct.cat,
-            });
+            const existingCat = await (0, rxjs_1.firstValueFrom)(this.client.send({ cmd: 'get_category_by_name' }, dto.cat));
+            if (!existingCat) {
+                await (0, rxjs_1.firstValueFrom)(this.client.send({ cmd: 'create_category' }, { cat: dto.cat, desc: '' }));
+            }
             return {
                 msg: 'Product added successfully',
                 product: newProduct,
@@ -607,6 +608,16 @@ module.exports = require("passport-jwt");
 /***/ ((module) => {
 
 module.exports = require("path");
+
+/***/ }),
+
+/***/ "rxjs":
+/*!***********************!*\
+  !*** external "rxjs" ***!
+  \***********************/
+/***/ ((module) => {
+
+module.exports = require("rxjs");
 
 /***/ })
 

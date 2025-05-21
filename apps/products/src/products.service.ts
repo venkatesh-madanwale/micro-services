@@ -15,27 +15,33 @@ export class ProductsService {
 
 
   async addProduct(dto: AddProductDto, file: { filename?: string }) {
-    try {
-      const newProduct = new this.productModel({
-        ...dto,
-        pimg: file?.filename || '',
-      });
+  try {
+    const newProduct = new this.productModel({
+      ...dto,
+      pimg: file?.filename || '',
+    });
 
-      await newProduct.save();
+    await newProduct.save();
 
-      // Emit event to Category microservice
-      this.client.emit('product_created', {
-        name: newProduct.name,
-        cat: newProduct.cat,
-      });
+    // 1. Check if category exists
+    const existingCat = await firstValueFrom(
+      this.client.send({ cmd: 'get_category_by_name' }, dto.cat),
+    );
 
-      return {
-        msg: 'Product added successfully',
-        product: newProduct,
-      };
-    } catch (err) {
-      console.error('Error saving product:', err);
-      throw new InternalServerErrorException('Could not save product');
+    // 2. If not found, create it
+    if (!existingCat) {
+      await firstValueFrom(
+        this.client.send({ cmd: 'create_category' }, { cat: dto.cat, desc: '' }),
+      );
     }
+
+    return {
+      msg: 'Product added successfully',
+      product: newProduct,
+    };
+  } catch (err) {
+    console.error('Error saving product:', err);
+    throw new InternalServerErrorException('Could not save product');
   }
+}
 }

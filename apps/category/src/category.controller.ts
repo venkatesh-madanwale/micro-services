@@ -6,6 +6,11 @@ import { CategoryService } from './category.service';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  @MessagePattern({ cmd: 'get_category_by_name' })
+async findByName(@Payload() cat: string) {
+  return this.categoryService.findByName(cat);
+}
+
   @MessagePattern({ cmd: 'create_category' })
   async create(@Payload() data: { cat: string; desc: string }) {
     const { cat, desc } = data;
@@ -23,12 +28,8 @@ export class CategoryController {
   }
 
   @MessagePattern({ cmd: 'update_category' })
-  async update(
-    @Payload()
-    data: { id: string; cat: string; desc: string },
-  ) {
-    const { id, cat, desc } = data;
-    return await this.categoryService.update(id, cat, desc);
+  async update(@Payload() data: { id: string; cat: string; desc: string }) {
+    return await this.categoryService.update(data.id, data.cat, data.desc);
   }
 
   @MessagePattern({ cmd: 'delete_category' })

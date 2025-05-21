@@ -7,13 +7,15 @@ import { Category, CategoryDocument } from './schema/category.schema';
 export class CategoryService {
   constructor(
     @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
-  ) {}
+  ) { }
 
   async create(cat: string, desc: string): Promise<Category> {
     const newCat = new this.categoryModel({ cat, desc });
     return await newCat.save();
   }
-
+  async findByName(cat: string): Promise<Category | null> {
+    return this.categoryModel.findOne({ cat }).exec();
+  }
   async findAll(): Promise<Category[]> {
     return await this.categoryModel.find().exec();
   }

@@ -1,14 +1,82 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ([
-/* 0 */,
-/* 1 */
-/***/ ((module) => {
+/******/ 	var __webpack_modules__ = ({
 
-module.exports = require("@nestjs/core");
+/***/ "./apps/auth/src/auth.contoller.ts":
+/*!*****************************************!*\
+  !*** ./apps/auth/src/auth.contoller.ts ***!
+  \*****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthController = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const auth_service_1 = __webpack_require__(/*! ./auth.service */ "./apps/auth/src/auth.service.ts");
+const register_dto_1 = __webpack_require__(/*! ./dto/register.dto */ "./apps/auth/src/dto/register.dto.ts");
+const login_dto_1 = __webpack_require__(/*! ./dto/login.dto */ "./apps/auth/src/dto/login.dto.ts");
+let AuthController = class AuthController {
+    authService;
+    constructor(authService) {
+        this.authService = authService;
+    }
+    register(dto) {
+        return this.authService.register(dto);
+    }
+    login(dto) {
+        return this.authService.login(dto);
+    }
+    async validateToken(payload) {
+        return this.authService.validatePayload(payload);
+    }
+};
+exports.AuthController = AuthController;
+__decorate([
+    (0, common_1.Post)('register'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_b = typeof register_dto_1.RegisterDto !== "undefined" && register_dto_1.RegisterDto) === "function" ? _b : Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "register", null);
+__decorate([
+    (0, common_1.Post)('login'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_c = typeof login_dto_1.LoginDto !== "undefined" && login_dto_1.LoginDto) === "function" ? _c : Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.Post)('validate'),
+    __param(0, (0, common_1.Body)('payload')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "validateToken", null);
+exports.AuthController = AuthController = __decorate([
+    (0, common_1.Controller)("auth"),
+    __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
+], AuthController);
+
 
 /***/ }),
-/* 2 */
+
+/***/ "./apps/auth/src/auth.module.ts":
+/*!**************************************!*\
+  !*** ./apps/auth/src/auth.module.ts ***!
+  \**************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -20,13 +88,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthModule = void 0;
-const common_1 = __webpack_require__(3);
-const auth_service_1 = __webpack_require__(4);
-const auth_contoller_1 = __webpack_require__(9);
-const jwt_1 = __webpack_require__(6);
-const config_1 = __webpack_require__(13);
-const microservices_1 = __webpack_require__(7);
-const jwt_strategy_1 = __webpack_require__(14);
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const auth_service_1 = __webpack_require__(/*! ./auth.service */ "./apps/auth/src/auth.service.ts");
+const auth_contoller_1 = __webpack_require__(/*! ./auth.contoller */ "./apps/auth/src/auth.contoller.ts");
+const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
+const jwt_strategy_1 = __webpack_require__(/*! ./strategy/jwt.strategy */ "./apps/auth/src/strategy/jwt.strategy.ts");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -76,13 +144,11 @@ exports.AuthModule = AuthModule = __decorate([
 
 
 /***/ }),
-/* 3 */
-/***/ ((module) => {
 
-module.exports = require("@nestjs/common");
-
-/***/ }),
-/* 4 */
+/***/ "./apps/auth/src/auth.service.ts":
+/*!***************************************!*\
+  !*** ./apps/auth/src/auth.service.ts ***!
+  \***************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -101,12 +167,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthService = void 0;
-const common_1 = __webpack_require__(3);
-const common_2 = __webpack_require__(3);
-const bcrypt = __webpack_require__(5);
-const jwt_1 = __webpack_require__(6);
-const microservices_1 = __webpack_require__(7);
-const rxjs_1 = __webpack_require__(8);
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const common_2 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const bcrypt = __webpack_require__(/*! bcrypt */ "bcrypt");
+const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
+const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
+const rxjs_1 = __webpack_require__(/*! rxjs */ "rxjs");
 let AuthService = class AuthService {
     userClient;
     jwtService;
@@ -160,31 +226,11 @@ exports.AuthService = AuthService = __decorate([
 
 
 /***/ }),
-/* 5 */
-/***/ ((module) => {
 
-module.exports = require("bcrypt");
-
-/***/ }),
-/* 6 */
-/***/ ((module) => {
-
-module.exports = require("@nestjs/jwt");
-
-/***/ }),
-/* 7 */
-/***/ ((module) => {
-
-module.exports = require("@nestjs/microservices");
-
-/***/ }),
-/* 8 */
-/***/ ((module) => {
-
-module.exports = require("rxjs");
-
-/***/ }),
-/* 9 */
+/***/ "./apps/auth/src/dto/login.dto.ts":
+/*!****************************************!*\
+  !*** ./apps/auth/src/dto/login.dto.ts ***!
+  \****************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -197,61 +243,34 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AuthController = void 0;
-const common_1 = __webpack_require__(3);
-const auth_service_1 = __webpack_require__(4);
-const register_dto_1 = __webpack_require__(10);
-const login_dto_1 = __webpack_require__(12);
-let AuthController = class AuthController {
-    authService;
-    constructor(authService) {
-        this.authService = authService;
-    }
-    register(dto) {
-        return this.authService.register(dto);
-    }
-    login(dto) {
-        return this.authService.login(dto);
-    }
-    async validateToken(payload) {
-        return this.authService.validatePayload(payload);
-    }
-};
-exports.AuthController = AuthController;
+exports.LoginDto = void 0;
+const class_validator_1 = __webpack_require__(/*! @nestjs/class-validator */ "@nestjs/class-validator");
+class LoginDto {
+    emailid;
+    pwd;
+}
+exports.LoginDto = LoginDto;
 __decorate([
-    (0, common_1.Post)('register'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof register_dto_1.RegisterDto !== "undefined" && register_dto_1.RegisterDto) === "function" ? _b : Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "register", null);
+    (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.MinLength)(3),
+    __metadata("design:type", String)
+], LoginDto.prototype, "emailid", void 0);
 __decorate([
-    (0, common_1.Post)('login'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_c = typeof login_dto_1.LoginDto !== "undefined" && login_dto_1.LoginDto) === "function" ? _c : Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "login", null);
-__decorate([
-    (0, common_1.Post)('validate'),
-    __param(0, (0, common_1.Body)('payload')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "validateToken", null);
-exports.AuthController = AuthController = __decorate([
-    (0, common_1.Controller)("auth"),
-    __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
-], AuthController);
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.MinLength)(6),
+    __metadata("design:type", String)
+], LoginDto.prototype, "pwd", void 0);
 
 
 /***/ }),
-/* 10 */
+
+/***/ "./apps/auth/src/dto/register.dto.ts":
+/*!*******************************************!*\
+  !*** ./apps/auth/src/dto/register.dto.ts ***!
+  \*******************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -266,7 +285,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RegisterDto = void 0;
-const class_validator_1 = __webpack_require__(11);
+const class_validator_1 = __webpack_require__(/*! @nestjs/class-validator */ "@nestjs/class-validator");
 class RegisterDto {
     emailid;
     name;
@@ -295,55 +314,11 @@ __decorate([
 
 
 /***/ }),
-/* 11 */
-/***/ ((module) => {
 
-module.exports = require("@nestjs/class-validator");
-
-/***/ }),
-/* 12 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.LoginDto = void 0;
-const class_validator_1 = __webpack_require__(11);
-class LoginDto {
-    emailid;
-    pwd;
-}
-exports.LoginDto = LoginDto;
-__decorate([
-    (0, class_validator_1.IsEmail)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.MinLength)(3),
-    __metadata("design:type", String)
-], LoginDto.prototype, "emailid", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.MinLength)(6),
-    __metadata("design:type", String)
-], LoginDto.prototype, "pwd", void 0);
-
-
-/***/ }),
-/* 13 */
-/***/ ((module) => {
-
-module.exports = require("@nestjs/config");
-
-/***/ }),
-/* 14 */
+/***/ "./apps/auth/src/strategy/jwt.strategy.ts":
+/*!************************************************!*\
+  !*** ./apps/auth/src/strategy/jwt.strategy.ts ***!
+  \************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -359,10 +334,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.JwtStrategy = void 0;
-const common_1 = __webpack_require__(3);
-const passport_1 = __webpack_require__(15);
-const passport_jwt_1 = __webpack_require__(16);
-const config_1 = __webpack_require__(13);
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+const passport_jwt_1 = __webpack_require__(/*! passport-jwt */ "passport-jwt");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
 let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
     configService;
     constructor(configService) {
@@ -391,19 +366,108 @@ exports.JwtStrategy = JwtStrategy = __decorate([
 
 
 /***/ }),
-/* 15 */
+
+/***/ "@nestjs/class-validator":
+/*!******************************************!*\
+  !*** external "@nestjs/class-validator" ***!
+  \******************************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/class-validator");
+
+/***/ }),
+
+/***/ "@nestjs/common":
+/*!*********************************!*\
+  !*** external "@nestjs/common" ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/common");
+
+/***/ }),
+
+/***/ "@nestjs/config":
+/*!*********************************!*\
+  !*** external "@nestjs/config" ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/config");
+
+/***/ }),
+
+/***/ "@nestjs/core":
+/*!*******************************!*\
+  !*** external "@nestjs/core" ***!
+  \*******************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/core");
+
+/***/ }),
+
+/***/ "@nestjs/jwt":
+/*!******************************!*\
+  !*** external "@nestjs/jwt" ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/jwt");
+
+/***/ }),
+
+/***/ "@nestjs/microservices":
+/*!****************************************!*\
+  !*** external "@nestjs/microservices" ***!
+  \****************************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/microservices");
+
+/***/ }),
+
+/***/ "@nestjs/passport":
+/*!***********************************!*\
+  !*** external "@nestjs/passport" ***!
+  \***********************************/
 /***/ ((module) => {
 
 module.exports = require("@nestjs/passport");
 
 /***/ }),
-/* 16 */
+
+/***/ "bcrypt":
+/*!*************************!*\
+  !*** external "bcrypt" ***!
+  \*************************/
+/***/ ((module) => {
+
+module.exports = require("bcrypt");
+
+/***/ }),
+
+/***/ "passport-jwt":
+/*!*******************************!*\
+  !*** external "passport-jwt" ***!
+  \*******************************/
 /***/ ((module) => {
 
 module.exports = require("passport-jwt");
 
+/***/ }),
+
+/***/ "rxjs":
+/*!***********************!*\
+  !*** external "rxjs" ***!
+  \***********************/
+/***/ ((module) => {
+
+module.exports = require("rxjs");
+
 /***/ })
-/******/ 	]);
+
+/******/ 	});
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
@@ -434,10 +498,13 @@ var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
 var exports = __webpack_exports__;
+/*!*******************************!*\
+  !*** ./apps/auth/src/main.ts ***!
+  \*******************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __webpack_require__(1);
-const auth_module_1 = __webpack_require__(2);
+const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
+const auth_module_1 = __webpack_require__(/*! ./auth.module */ "./apps/auth/src/auth.module.ts");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(auth_module_1.AuthModule);
     await app.listen(process.env.port ?? 3000);
