@@ -362,16 +362,22 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
 const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
 const category_module_1 = __webpack_require__(/*! ./category.module */ "./apps/category/src/category.module.ts");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
 async function bootstrap() {
-    const app = await core_1.NestFactory.createMicroservice(category_module_1.CategoryModule, {
+    const app = await core_1.NestFactory.create(category_module_1.CategoryModule);
+    const config = app.get(config_1.ConfigService);
+    const port = config.get("CATEGORY_PORT");
+    const tcpPort = config.get("CATEGORY_TCP_PORT");
+    app.connectMicroservice({
         transport: microservices_1.Transport.TCP,
         options: {
-            host: '127.0.0.1',
-            port: 3004,
-        },
+            host: config.get("CATEGORY_TCP_HOST"),
+            port: tcpPort
+        }
     });
-    await app.listen();
-    console.log('Category microservice is running on TCP port 3004');
+    await app.startAllMicroservices();
+    await app.listen(port || 3003);
+    console.log('Category microservice is running on TCP port 3003');
 }
 bootstrap();
 

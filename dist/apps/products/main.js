@@ -2,186 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./apps/auth/src/strategy/jwt.strategy.ts":
-/*!************************************************!*\
-  !*** ./apps/auth/src/strategy/jwt.strategy.ts ***!
-  \************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.JwtStrategy = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
-const passport_jwt_1 = __webpack_require__(/*! passport-jwt */ "passport-jwt");
-const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
-let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
-    configService;
-    constructor(configService) {
-        const jwtSecret = configService.get('JWT_SECRET');
-        if (!jwtSecret) {
-            throw new Error('JWT_SECRET not found');
-        }
-        super({
-            jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: configService.get('JWT_SECRET'),
-        });
-        this.configService = configService;
-    }
-    async validate(payload) {
-        return {
-            emailid: payload.emailid,
-            role: payload.role,
-        };
-    }
-};
-exports.JwtStrategy = JwtStrategy;
-exports.JwtStrategy = JwtStrategy = __decorate([
-    (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object])
-], JwtStrategy);
-
-
-/***/ }),
-
-/***/ "./apps/micro-services/src/app.controller.ts":
-/*!***************************************************!*\
-  !*** ./apps/micro-services/src/app.controller.ts ***!
-  \***************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AppController = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const app_service_1 = __webpack_require__(/*! ./app.service */ "./apps/micro-services/src/app.service.ts");
-let AppController = class AppController {
-    appService;
-    constructor(appService) {
-        this.appService = appService;
-    }
-    getHello() {
-        return this.appService.getHello();
-    }
-};
-exports.AppController = AppController;
-__decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", String)
-], AppController.prototype, "getHello", null);
-exports.AppController = AppController = __decorate([
-    (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [typeof (_a = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _a : Object])
-], AppController);
-
-
-/***/ }),
-
-/***/ "./apps/micro-services/src/app.module.ts":
-/*!***********************************************!*\
-  !*** ./apps/micro-services/src/app.module.ts ***!
-  \***********************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AppModule = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const app_controller_1 = __webpack_require__(/*! ./app.controller */ "./apps/micro-services/src/app.controller.ts");
-const app_service_1 = __webpack_require__(/*! ./app.service */ "./apps/micro-services/src/app.service.ts");
-const jwt_strategy_1 = __webpack_require__(/*! apps/auth/src/strategy/jwt.strategy */ "./apps/auth/src/strategy/jwt.strategy.ts");
-const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const products_module_1 = __webpack_require__(/*! apps/products/src/products.module */ "./apps/products/src/products.module.ts");
-const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
-let AppModule = class AppModule {
-};
-exports.AppModule = AppModule;
-exports.AppModule = AppModule = __decorate([
-    (0, common_1.Module)({
-        imports: [
-            microservices_1.ClientsModule.register([
-                {
-                    name: 'PRODUCT_SERVICE',
-                    transport: microservices_1.Transport.TCP,
-                    options: {
-                        host: '127.0.0.1',
-                        port: 3003,
-                    },
-                },
-            ]),
-            config_1.ConfigModule.forRoot({
-                isGlobal: true,
-            }),
-            mongoose_1.MongooseModule.forRoot(process.env.MONGO_URI || "mongodb+srv://madanwalevenkateshj:guqbWxgK5KVq9h9w@cluster0.w3gibek.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"),
-            config_1.ConfigModule.forRoot(),
-            products_module_1.ProductsModule,
-        ],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService, jwt_strategy_1.JwtStrategy],
-    })
-], AppModule);
-
-
-/***/ }),
-
-/***/ "./apps/micro-services/src/app.service.ts":
-/*!************************************************!*\
-  !*** ./apps/micro-services/src/app.service.ts ***!
-  \************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AppService = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-let AppService = class AppService {
-    getHello() {
-        return 'Hello World!';
-    }
-};
-exports.AppService = AppService;
-exports.AppService = AppService = __decorate([
-    (0, common_1.Injectable)()
-], AppService);
-
-
-/***/ }),
-
 /***/ "./apps/products/src/dto/add-product.dto.ts":
 /*!**************************************************!*\
   !*** ./apps/products/src/dto/add-product.dto.ts ***!
@@ -232,31 +52,6 @@ __decorate([
 
 /***/ }),
 
-/***/ "./apps/products/src/multer.config.ts":
-/*!********************************************!*\
-  !*** ./apps/products/src/multer.config.ts ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.multerConfig = void 0;
-const multer_1 = __webpack_require__(/*! multer */ "multer");
-const path_1 = __webpack_require__(/*! path */ "path");
-exports.multerConfig = {
-    storage: (0, multer_1.diskStorage)({
-        destination: './src/prodimgs',
-        filename: (req, file, callback) => {
-            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-            const ext = (0, path_1.extname)(file.originalname);
-            callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-        },
-    }),
-};
-
-
-/***/ }),
-
 /***/ "./apps/products/src/products.controller.ts":
 /*!**************************************************!*\
   !*** ./apps/products/src/products.controller.ts ***!
@@ -276,15 +71,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c;
+var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ProductsGatewayController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const platform_express_1 = __webpack_require__(/*! @nestjs/platform-express */ "@nestjs/platform-express");
 const add_product_dto_1 = __webpack_require__(/*! ./dto/add-product.dto */ "./apps/products/src/dto/add-product.dto.ts");
-const multer_config_1 = __webpack_require__(/*! ./multer.config */ "./apps/products/src/multer.config.ts");
-const multer_1 = __webpack_require__(/*! multer */ "multer");
 const products_service_1 = __webpack_require__(/*! ./products.service */ "./apps/products/src/products.service.ts");
+const multer_1 = __webpack_require__(/*! multer */ "multer");
+const path_1 = __webpack_require__(/*! path */ "path");
 let ProductsGatewayController = class ProductsGatewayController {
     productService;
     constructor(productService) {
@@ -298,11 +93,20 @@ let ProductsGatewayController = class ProductsGatewayController {
 exports.ProductsGatewayController = ProductsGatewayController;
 __decorate([
     (0, common_1.Post)('add'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('pimg', multer_config_1.multerConfig)),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('pimg', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './prodimgs',
+            filename: (req, file, cb) => {
+                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+                const ext = (0, path_1.extname)(file.originalname);
+                cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+            }
+        })
+    })),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof add_product_dto_1.AddProductDto !== "undefined" && add_product_dto_1.AddProductDto) === "function" ? _b : Object, typeof (_c = typeof multer_1.File !== "undefined" && multer_1.File) === "function" ? _c : Object]),
+    __metadata("design:paramtypes", [typeof (_b = typeof add_product_dto_1.AddProductDto !== "undefined" && add_product_dto_1.AddProductDto) === "function" ? _b : Object, typeof (_d = typeof Express !== "undefined" && (_c = Express.Multer) !== void 0 && _c.File) === "function" ? _d : Object]),
     __metadata("design:returntype", Promise)
 ], ProductsGatewayController.prototype, "addProduct", null);
 exports.ProductsGatewayController = ProductsGatewayController = __decorate([
@@ -344,6 +148,13 @@ exports.ProductsModule = ProductsModule = __decorate([
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
                 envFilePath: 'apps/products/.env'
+            }),
+            mongoose_1.MongooseModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: async (config) => ({
+                    uri: config.get('MONGO_URI'),
+                }),
             }),
             mongoose_1.MongooseModule.forFeature([{ name: product_schema_1.Product.name, schema: product_schema_1.ProductSchema }]),
             config_1.ConfigModule.forRoot({
@@ -541,16 +352,6 @@ module.exports = require("@nestjs/mongoose");
 
 /***/ }),
 
-/***/ "@nestjs/passport":
-/*!***********************************!*\
-  !*** external "@nestjs/passport" ***!
-  \***********************************/
-/***/ ((module) => {
-
-module.exports = require("@nestjs/passport");
-
-/***/ }),
-
 /***/ "@nestjs/platform-express":
 /*!*******************************************!*\
   !*** external "@nestjs/platform-express" ***!
@@ -588,16 +389,6 @@ module.exports = require("mongoose");
 /***/ ((module) => {
 
 module.exports = require("multer");
-
-/***/ }),
-
-/***/ "passport-jwt":
-/*!*******************************!*\
-  !*** external "passport-jwt" ***!
-  \*******************************/
-/***/ ((module) => {
-
-module.exports = require("passport-jwt");
 
 /***/ }),
 
@@ -658,18 +449,24 @@ var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
-const app_module_1 = __webpack_require__(/*! apps/micro-services/src/app.module */ "./apps/micro-services/src/app.module.ts");
+const products_module_1 = __webpack_require__(/*! ./products.module */ "./apps/products/src/products.module.ts");
 const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
 async function bootstrap() {
-    const app = await core_1.NestFactory.createMicroservice(app_module_1.AppModule, {
+    const app = await core_1.NestFactory.create(products_module_1.ProductsModule);
+    const config = app.get(config_1.ConfigService);
+    const port = config.get("PRODUCT_PORT");
+    const tcpPort = config.get("PRODUCT_TCP_PORT");
+    app.connectMicroservice({
         transport: microservices_1.Transport.TCP,
         options: {
-            host: '127.0.0.1',
-            port: 3003,
-        },
+            host: config.get("PRODUCT_TCP_HOST"),
+            port: tcpPort
+        }
     });
-    await app.listen();
-    console.log('Product Microservice is running on TCP port 3003');
+    await app.startAllMicroservices();
+    await app.listen(port || 3002);
+    console.log("Product micro service listening on port 3002");
 }
 bootstrap();
 

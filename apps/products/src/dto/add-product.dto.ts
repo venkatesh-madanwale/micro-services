@@ -1,6 +1,8 @@
 // add-product.dto.ts
 import { IsString, IsNotEmpty } from 'class-validator';
 
+// Just for class validation
+
 export class AddProductDto {
   @IsString()
   @IsNotEmpty()

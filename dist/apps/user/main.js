@@ -359,15 +359,21 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
 const user_module_1 = __webpack_require__(/*! ./user.module */ "./apps/user/src/user.module.ts");
 const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
 async function bootstrap() {
-    const app = await core_1.NestFactory.createMicroservice(user_module_1.UsersModule, {
+    const app = await core_1.NestFactory.create(user_module_1.UsersModule);
+    const config = app.get(config_1.ConfigService);
+    const port = config.get("USER_PORT");
+    const tcpPort = config.get("USER_TCP_PORT");
+    app.connectMicroservice({
         transport: microservices_1.Transport.TCP,
         options: {
-            host: "127.0.0.1",
-            port: 3001
+            host: config.get("USER_TCP_HOST"),
+            port: tcpPort
         }
     });
-    await app.listen();
+    await app.startAllMicroservices();
+    await app.listen(port ?? 3001);
     console.log("User micro service listening on port 3001");
 }
 bootstrap();

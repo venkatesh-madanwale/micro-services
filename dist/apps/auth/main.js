@@ -505,9 +505,22 @@ var exports = __webpack_exports__;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
 const auth_module_1 = __webpack_require__(/*! ./auth.module */ "./apps/auth/src/auth.module.ts");
+const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(auth_module_1.AuthModule);
-    await app.listen(process.env.port ?? 3000);
+    const config = app.get(config_1.ConfigService);
+    const port = config.get("AUTH_PORT");
+    const tcpPort = config.get("AUTH_TCP_PORT");
+    app.connectMicroservice({
+        transport: microservices_1.Transport.TCP,
+        options: {
+            host: config.get("AUTH_TCP_HOST"),
+            port: tcpPort
+        }
+    });
+    await app.startAllMicroservices();
+    await app.listen(port ?? 3000);
     console.log("Auth micro service listening on port 3000");
 }
 bootstrap();
