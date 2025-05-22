@@ -38,7 +38,6 @@ export class ProductsService {
           this.client.send({ cmd: 'create_category' }, { cat: dto.cat, desc: '' }),
         );
       }
-
       return {
         msg: 'Product added successfully',
         product: newProduct,
@@ -48,4 +47,48 @@ export class ProductsService {
       throw new InternalServerErrorException('Could not save product');
     }
   }
+
+  // Get all products
+async getAllProducts() {
+  try {
+    return await this.productModel.find();
+  } catch (err) {
+    console.error('Error retrieving products:', err);
+    throw new InternalServerErrorException('Could not retrieve products');
+  }
+}
+
+// Update product (excluding image)
+async updateProduct(id: string, updateData: Partial<Omit<Product, 'pimg'>>) {
+  try {
+    const updatedProduct = await this.productModel.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true },
+    );
+    if (!updatedProduct) throw new Error('Product not found');
+    return {
+      msg: 'Product updated successfully',
+      product: updatedProduct,
+    };
+  } catch (err) {
+    console.error('Error updating product:', err);
+    throw new InternalServerErrorException('Could not update product');
+  }
+}
+
+// Delete a product
+async deleteProduct(id: string) {
+  try {
+    const deleted = await this.productModel.findByIdAndDelete(id);
+    if (!deleted) throw new Error('Product not found');
+    return { msg: 'Product deleted successfully', product: deleted };
+  } catch (err) {
+    console.error('Error deleting product:', err);
+    throw new InternalServerErrorException('Could not delete product');
+  }
+}
+
+
+
 }

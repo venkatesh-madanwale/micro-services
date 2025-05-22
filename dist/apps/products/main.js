@@ -71,7 +71,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ProductsGatewayController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -88,6 +88,15 @@ let ProductsGatewayController = class ProductsGatewayController {
     async addProduct(body, file) {
         const filename = file?.filename || '';
         return this.productService.addProduct(body, file);
+    }
+    async getAllProducts() {
+        return this.productService.getAllProducts();
+    }
+    async updateProduct(id, body) {
+        return this.productService.updateProduct(id, body);
+    }
+    async deleteProduct(id) {
+        return this.productService.deleteProduct(id);
     }
 };
 exports.ProductsGatewayController = ProductsGatewayController;
@@ -109,6 +118,27 @@ __decorate([
     __metadata("design:paramtypes", [typeof (_b = typeof add_product_dto_1.AddProductDto !== "undefined" && add_product_dto_1.AddProductDto) === "function" ? _b : Object, typeof (_d = typeof Express !== "undefined" && (_c = Express.Multer) !== void 0 && _c.File) === "function" ? _d : Object]),
     __metadata("design:returntype", Promise)
 ], ProductsGatewayController.prototype, "addProduct", null);
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ProductsGatewayController.prototype, "getAllProducts", null);
+__decorate([
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, typeof (_e = typeof Partial !== "undefined" && Partial) === "function" ? _e : Object]),
+    __metadata("design:returntype", Promise)
+], ProductsGatewayController.prototype, "updateProduct", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductsGatewayController.prototype, "deleteProduct", null);
 exports.ProductsGatewayController = ProductsGatewayController = __decorate([
     (0, common_1.Controller)('products'),
     __metadata("design:paramtypes", [typeof (_a = typeof products_service_1.ProductsService !== "undefined" && products_service_1.ProductsService) === "function" ? _a : Object])
@@ -233,6 +263,42 @@ let ProductsService = class ProductsService {
         catch (err) {
             console.error('Error saving product:', err);
             throw new common_1.InternalServerErrorException('Could not save product');
+        }
+    }
+    async getAllProducts() {
+        try {
+            return await this.productModel.find();
+        }
+        catch (err) {
+            console.error('Error retrieving products:', err);
+            throw new common_1.InternalServerErrorException('Could not retrieve products');
+        }
+    }
+    async updateProduct(id, updateData) {
+        try {
+            const updatedProduct = await this.productModel.findByIdAndUpdate(id, updateData, { new: true });
+            if (!updatedProduct)
+                throw new Error('Product not found');
+            return {
+                msg: 'Product updated successfully',
+                product: updatedProduct,
+            };
+        }
+        catch (err) {
+            console.error('Error updating product:', err);
+            throw new common_1.InternalServerErrorException('Could not update product');
+        }
+    }
+    async deleteProduct(id) {
+        try {
+            const deleted = await this.productModel.findByIdAndDelete(id);
+            if (!deleted)
+                throw new Error('Product not found');
+            return { msg: 'Product deleted successfully', product: deleted };
+        }
+        catch (err) {
+            console.error('Error deleting product:', err);
+            throw new common_1.InternalServerErrorException('Could not delete product');
         }
     }
 };

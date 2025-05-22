@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UploadedFile, UseInterceptors, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, UploadedFile, UseInterceptors, Get, Param, Put, Delete } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Inject } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -22,7 +22,7 @@ export class ProductsGatewayController {
   @UseInterceptors(FileInterceptor('pimg', {
     storage: diskStorage({
       destination: './prodimgs',
-      filename: (req,file,cb)=>{
+      filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         const ext = extname(file.originalname); // gets .jpg, .png, etc.
         cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
@@ -32,5 +32,23 @@ export class ProductsGatewayController {
   async addProduct(@Body() body: AddProductDto, @UploadedFile() file: Express.Multer.File) {
     const filename = file?.filename || '';
     return this.productService.addProduct(body, file);
+  }
+
+
+  // @Get("getAllProducts")
+  @Get()
+  async getAllProducts() {
+    return this.productService.getAllProducts();
+  }
+
+  //update
+  @Put(':id')
+  async updateProduct(@Param('id') id: string, @Body() body: Partial<Omit<AddProductDto, 'pimg'>>) {
+    return this.productService.updateProduct(id, body);
+  }
+  //delete
+  @Delete(':id')
+  async deleteProduct(@Param('id') id: string) {
+    return this.productService.deleteProduct(id);
   }
 }

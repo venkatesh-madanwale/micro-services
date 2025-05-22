@@ -103,7 +103,7 @@ exports.AuthModule = AuthModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
-                envFilePath: 'apps/auth/.env'
+                envFilePath: 'apps/auth/.env',
             }),
             microservices_1.ClientsModule.registerAsync([
                 {
@@ -111,34 +111,33 @@ exports.AuthModule = AuthModule = __decorate([
                     imports: [config_1.ConfigModule],
                     inject: [config_1.ConfigService],
                     useFactory: async (config) => {
-                        const host = await config.get("USER_SERVICE_HOST");
-                        console.log(`userService host: ${host}`);
+                        const host = config.get('USER_TCP_HOST') || '127.0.0.1';
+                        const port = config.get('USER_TCP_PORT') || 3006;
+                        console.log(`USER_SERVICE HOST: ${host}, PORT: ${port}`);
                         return {
                             transport: microservices_1.Transport.TCP,
                             options: {
-                                host: config.get('USER_SERVICE_HOST'),
-                                port: config.get('USER_SERVICE_PORT')
-                            }
+                                host,
+                                port,
+                            },
                         };
                     },
-                }
+                },
             ]),
             jwt_1.JwtModule.registerAsync({
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
-                useFactory: async (config) => {
-                    return {
-                        secret: config.get('JWT_SECRET'),
-                        signOptions: {
-                            expiresIn: "1d"
-                        }
-                    };
-                }
-            })
+                useFactory: async (config) => ({
+                    secret: config.get('JWT_SECRET'),
+                    signOptions: {
+                        expiresIn: '1d',
+                    },
+                }),
+            }),
         ],
         providers: [jwt_strategy_1.JwtStrategy, auth_service_1.AuthService],
         controllers: [auth_contoller_1.AuthController],
-        exports: [auth_service_1.AuthService]
+        exports: [auth_service_1.AuthService],
     })
 ], AuthModule);
 
