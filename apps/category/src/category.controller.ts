@@ -4,12 +4,12 @@ import { CategoryService } from './category.service';
 
 @Controller()
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) { }
 
   @MessagePattern({ cmd: 'get_category_by_name' })
-async findByName(@Payload() cat: string) {
-  return this.categoryService.findByName(cat);
-}
+  async findByName(@Payload() cat: string) {
+    return this.categoryService.findByName(cat);
+  }
 
   @MessagePattern({ cmd: 'create_category' })
   async create(@Payload() data: { cat: string; desc: string }) {
