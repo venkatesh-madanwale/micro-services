@@ -9,7 +9,10 @@ import { ProductsGatewayController } from './products.controller';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: 'apps/products/.env'
+    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -28,7 +31,7 @@ import { ProductsGatewayController } from './products.controller';
         transport: Transport.TCP,
         options: {
           host: 'localhost',
-          port: 8080,
+          port: 3008,
         },
       },
     ]),

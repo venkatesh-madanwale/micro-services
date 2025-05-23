@@ -103,6 +103,7 @@ exports.AuthModule = AuthModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
+                envFilePath: 'apps/auth/.env',
             }),
             microservices_1.ClientsModule.registerAsync([
                 {
@@ -507,10 +508,6 @@ const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestj
 const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(auth_module_1.AuthModule);
-    app.enableCors({
-        origin: '*',
-        credential: true
-    });
     const config = app.get(config_1.ConfigService);
     const port = config.get("AUTH_PORT");
     const tcpPort = config.get("AUTH_TCP_PORT");

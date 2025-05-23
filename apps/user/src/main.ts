@@ -5,13 +5,6 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(UsersModule);
-
-  //Allow all the origins to connect to everyone
-  app.enableCors({
-    origin: '*',
-    credential: true
-  })
-
   const config = app.get(ConfigService)
 
   //HTTP configs
