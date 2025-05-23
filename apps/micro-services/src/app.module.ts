@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JwtStrategy } from 'apps/auth/src/strategy/jwt.strategy';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductsModule } from 'apps/products/src/products.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -12,43 +12,95 @@ import { CategoryModule } from 'apps/category/src/category.module';
 
 @Module({
   imports: [
-    ClientsModule.register([
-
+    ConfigModule.forRoot(),
+    ClientsModule.registerAsync([
       {
         name: 'AUTH_SERVICE',
-        transport: Transport.TCP,
-        options: {
-          host: '127.0.0.1',
-          port: 8080,
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (config: ConfigService) => {
+          // Read host and port from environment variables
+          const host = config.get<string>('USER_TCP_HOST') || '127.0.0.1';
+          const port = config.get<number>('AUTH_TCP_PORT') || 8080;
+
+          // Log to confirm values are being read correctly
+          console.log(`AUTH_SERVICE HOST: ${host}, PORT: ${port}`);
+
+          return {
+            transport: Transport.TCP,
+            options: {
+              host, // same as host: host
+              port, // same as port: port
+            },
+          };
         },
+
       },
 
       {
         name: 'USER_SERVICE',
-        transport: Transport.TCP,
-        options: {
-          host: '127.0.0.1',
-          port: 8080,
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (config: ConfigService) => {
+          // Read host and port from environment variables
+          const host = config.get<string>('USER_TCP_HOST') || '127.0.0.1';
+          const port = config.get<number>('USER_TCP_PORT') || 8080;
+
+          // Log to confirm values are being read correctly
+          console.log(`USER_SERVICE HOST: ${host}, PORT: ${port}`);
+
+          return {
+            transport: Transport.TCP,
+            options: {
+              host, // same as host: host
+              port, // same as port: port
+            },
+          };
         },
       },
 
       {
         name: 'PRODUCT_SERVICE',
-        transport: Transport.TCP,
-        options: {
-          host: '127.0.0.1',
-          port: 8080,
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (config: ConfigService) => {
+          // Read host and port from environment variables
+          const host = config.get<string>('PRODUCT_TCP_HOST') || '127.0.0.1';
+          const port = config.get<number>('PRODUCT_TCP_PORT') || 8080;
+
+          // Log to confirm values are being read correctly
+          console.log(`PRODUCT_SERVICE HOST: ${host}, PORT: ${port}`);
+
+          return {
+            transport: Transport.TCP,
+            options: {
+              host, // same as host: host
+              port, // same as port: port
+            },
+          };
         },
       },
-
       {
         name: 'CATEGORY_SERVICE',
-        transport: Transport.TCP,
-        options: {
-          host: '127.0.0.1',
-          port: 8080,
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (config: ConfigService) => {
+          // Read host and port from environment variables
+          const host = config.get<string>('CATEGORY_TCP_HOST') || '127.0.0.1';
+          const port = config.get<number>('CATEGORY_TCP_PORT') || 8080;
+
+          // Log to confirm values are being read correctly
+          console.log(`CATEGORY_SERVICE HOST: ${host}, PORT: ${port}`);
+
+          return {
+            transport: Transport.TCP,
+            options: {
+              host, // same as host: host
+              port, // same as port: port
+            },
+          };
         },
-      },
+      }
 
     ]),
     ConfigModule.forRoot({
