@@ -9,7 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     imports: [
         ConfigModule.forRoot({
             isGlobal:true,
-            envFilePath:'apps/user/.env'
+            // envFilePath:'apps/user/.env'
         }),
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRootAsync({

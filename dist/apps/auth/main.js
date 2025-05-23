@@ -103,7 +103,6 @@ exports.AuthModule = AuthModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
-                envFilePath: 'apps/auth/.env',
             }),
             microservices_1.ClientsModule.registerAsync([
                 {

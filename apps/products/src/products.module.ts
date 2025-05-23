@@ -11,7 +11,7 @@ import { ProductsGatewayController } from './products.controller';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: 'apps/products/.env'
+      // envFilePath: 'apps/products/.env'
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],

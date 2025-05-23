@@ -69,7 +69,7 @@ import { JwtStrategy } from "./strategy/jwt.strategy";
         // Load environment variables from apps/auth/.env
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: 'apps/auth/.env',
+            // envFilePath: 'apps/auth/.env',
         }),
 
         // Register the USER_SERVICE microservice client via TCP
