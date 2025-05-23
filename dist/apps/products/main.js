@@ -175,10 +175,7 @@ exports.ProductsModule = ProductsModule;
 exports.ProductsModule = ProductsModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            config_1.ConfigModule.forRoot({
-                isGlobal: true,
-                envFilePath: 'apps/products/.env'
-            }),
+            config_1.ConfigModule.forRoot(),
             mongoose_1.MongooseModule.forRootAsync({
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
@@ -518,8 +515,13 @@ const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
 const products_module_1 = __webpack_require__(/*! ./products.module */ "./apps/products/src/products.module.ts");
 const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
 const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(products_module_1.ProductsModule);
+    app.enableCors({
+        origin: '*',
+        credential: true
+    });
     const config = app.get(config_1.ConfigService);
     const port = config.get("PRODUCT_PORT");
     const tcpPort = config.get("PRODUCT_TCP_PORT");
@@ -533,6 +535,7 @@ async function bootstrap() {
     await app.startAllMicroservices();
     await app.listen(port || 3002);
     console.log("Product micro service listening on port 3002");
+    common_1.Logger.log(`this is the tcp port:: ${tcpPort}`);
 }
 bootstrap();
 
