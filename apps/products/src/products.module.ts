@@ -9,10 +9,7 @@ import { ProductsGatewayController } from './products.controller';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      // envFilePath: 'apps/products/.env'
-    }),
+    ConfigModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
