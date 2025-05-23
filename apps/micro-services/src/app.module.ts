@@ -59,7 +59,7 @@ import { CategoryModule } from 'apps/category/src/category.module';
     ProductsModule,
     AuthModule,
     UsersModule,
-  CategoryModule],
+    CategoryModule],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
 })

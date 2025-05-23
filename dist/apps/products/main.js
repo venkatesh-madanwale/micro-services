@@ -193,7 +193,7 @@ exports.ProductsModule = ProductsModule = __decorate([
                     transport: microservices_1.Transport.TCP,
                     options: {
                         host: 'localhost',
-                        port: 3008,
+                        port: 8080,
                     },
                 },
             ]),

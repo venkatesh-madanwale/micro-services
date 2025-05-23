@@ -28,7 +28,7 @@ import { ProductsGatewayController } from './products.controller';
         transport: Transport.TCP,
         options: {
           host: 'localhost',
-          port: 3008,
+          port: 8080,
         },
       },
     ]),
