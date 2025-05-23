@@ -2,7 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import { ProductsModule } from "./products.module";
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 import { ConfigService } from "@nestjs/config";
-import { Post } from "@nestjs/common";
+import { Logger, Post } from "@nestjs/common";
 
 async function bootstrap() {
   //HTTP communication between Postman and product
@@ -38,5 +38,6 @@ async function bootstrap() {
   await app.listen(port || 3002)
   console.log("Product micro service listening on port 3002")
 
+  Logger.log(`this is the tcp port:: ${tcpPort}`)
 }
 bootstrap();
