@@ -16,7 +16,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: async (config: ConfigService) => ({
-                uri: config.get<any>('MONGO_URI')
+                // uri: config.get<any>('MONGO_URI')
+                // uri: config.get<string>('MONGO_URI')
+                uri: "mongodb+srv://madanwalevenkateshj:guqbWxgK5KVq9h9w@cluster0.w3gibek.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
             })
         }),
         MongooseModule.forFeature([{
